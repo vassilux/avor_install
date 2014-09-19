@@ -1,0 +1,8 @@
+[asterisk]
+enabled => yes
+dsn => mysql-odbc
+username => asterisk
+password => asterisk
+pooling => no
+limit => 1
+pre-connect => yes

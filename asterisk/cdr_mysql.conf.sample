@@ -1,0 +1,12 @@
+
+[columns]
+alias start => calldate
+
+[global]
+hostname=localhost
+dbname=asteriskcdrdb
+table=cdr
+password=asterisk
+user=asterisk
+port=3306
+timezone=UTC ; Previously called usegmtime

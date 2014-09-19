@@ -1,0 +1,9 @@
+[mysql-odbc]
+Description           = ODBC to Mysql
+Driver                = MySQL
+Database              = asteriskcdrdb
+Server                = 127.0.0.1
+UserName              = asterisk
+Password              = asterisk
+Socket                = /var/run/mysqld/mysql.sock  
+option                = 3

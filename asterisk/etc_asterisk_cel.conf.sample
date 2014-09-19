@@ -1,0 +1,10 @@
+[general]
+enable=yes    
+apps=all
+events=ALL
+dateformat = %d-%m-%Y %T
+
+[manager]
+enabled=yes
+
+[radius]
