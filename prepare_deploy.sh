@@ -1,9 +1,9 @@
 #!/bin/bash
 #
 # 
-# Description : Prepare deploy revor package. 
+# Description : Prepare deploy packages for avor install application. 
 # Author : vassilux
-# Last modified : 2014-09-19 14:53:54  
+# Last modified : 2014-09-19 14:37:47 
 #
 
 set -e
@@ -12,31 +12,34 @@ VER_MAJOR="1"
 VER_MINOR="0"
 VER_PATCH="0"
 
-DEPLOY_APP="avoir_install"
+APP_NAME="avor_install"
 
+DEPLOY_DIR="${APP_NAME}_${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}"
+DEPLOY_FILE_NAME="${APP_NAME}_${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}.tar.gz"
 
-DEPLOY_APP_VER="${DEPLOY_APP}_${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}"
-DEPLOY_DIR="${DEPLOY_APP_VER}"
+if [ -d "$DEPLOY_DIR" ]; then
+    rm -rf  "$DEPLOY_DIR"
+fi
 #
-if [ -d "${DEPLOY_DIR}" ]; then
-	rm -rf ${DEPLOY_DIR}
+if [ -f "$DEPLOY_FILE_NAME" ]; then
+    rm -rf  "$DEPLOY_FILE_NAME"
+fi
+#
+#
+mkdir "$DEPLOY_DIR"
+mkdir "$DEPLOY_DIR/asterisk"
+cp -aR asterisk/* "$DEPLOY_DIR/asterisk"
+mkdir "$DEPLOY_DIR/sql"
+cp -aR sql/* "$DEPLOY_DIR/sql"
+#
+cp install.sh "$DEPLOY_DIR"
+tar cvzf "${DEPLOY_FILE_NAME}" "${DEPLOY_DIR}"
+
+if [ ! -f "$DEPLOY_FILE_NAME" ]; then
+    echo "Deploy build failed."
+    exit 1
 fi
 
-if [ -f "${DEPLOY_APP}.tar.gz" ]; then
-	rm -rf "${DEPLOY_APP}.tar.gz"
-fi
 
-mkdir "${DEPLOY_DIR}"
-
-#
-mv "${DEPLOY_APP}.tar.gz" "$DEPLOY_DIR"
-cd "${DEPLOY_DIR}"
-tar xvzf avoir_install.tar.gz
-rm -rf "${DEPLOY_APP}.tar.gz"
-cd ..
-tar cvzf "${DEPLOY_APP_VER}.tar.gz" ${DEPLOY_APP_VER}
-
-
-rm -rf "${DEPLOY_APP_VER}"
-
-echo "Deploy finished."
+rm -rf "$DEPLOY_DIR"
+echo "Deploy build complete."
