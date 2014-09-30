@@ -34,7 +34,10 @@ function install_redis()
 
 function install_mongodb()
 {
-	apt-get install mongodb
+	apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+	echo 'deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+	apt-get update
+	apt-get install -y mongodb-org=2.6.1 mongodb-org-server=2.6.1 mongodb-org-shell=2.6.1 mongodb-org-mongos=2.6.1 mongodb-org-tools=2.6.1
 	dprint 0 INFO "Mongodb server installed"
 
 }
@@ -85,15 +88,26 @@ function install_configuration_files()
 function main()
 {
 	dprint 0 INFO "avor installation started."
+	dprint 0 INFO "Please if the target system has an internet access ?."
+	dprint 0 INFO "Do you want to continue)? [y/N]";
+	read prompt
+
+	if [[ ${prompt} =~ [yY](es)* ]]; then
+		echo ""
+	else
+  			dprint 0 INFO "Bye see you next time...";
+  			exit 0
+  	fi
+  	#
 	dprint 0 INFO "Do you want install redis server (optional)? [y/N]";
-	read redis_install
-	if [ "${redis_install}" == "Y" -o  "${redis_install}" == "y" ]; then
+	read prompt
+	if [[ ${prompt} =~ [yY](es)* ]]; then
   			install_redis
   	fi
   	#
   	dprint 0 INFO "Do you want install mongodb server (optional)? [y/N]";
-	read mongodb_install
-	if [ "${mongodb_install}" == "Y" -o  "${mongodb_install}" == "y" ]; then
+	read prompt
+	if [[ ${prompt} =~ [yY](es)* ]]; then
   			install_mongodb
   	fi
 
