@@ -1,1 +1,1 @@
-{ "_id" : { "$oid" : "542b007abc2fa63c3b8b4567" }, "firstname" : "Claude", "isadmin" : true, "lastname" : "Neri", "password" : "crackme", "username" : "admin" }
+{ "_id" : { "$oid" : "542b007abc2fa63c3b8b4567" }, "firstname" : "Jean", "isadmin" : true, "lastname" : "Loup", "password" : "crackme", "username" : "admin" }
