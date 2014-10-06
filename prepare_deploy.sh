@@ -14,8 +14,7 @@ VER_PATCH="0"
 
 APP_NAME="avor_install"
 
-DEPLOY_DIR="${APP_NAME}
-#_${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}"
+DEPLOY_DIR="${APP_NAME}_${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}"
 DEPLOY_FILE_NAME="${APP_NAME}_${VER_MAJOR}.${VER_MINOR}.${VER_PATCH}.tar.gz"
 
 if [ -d "$DEPLOY_DIR" ]; then
@@ -34,7 +33,7 @@ mkdir "$DEPLOY_DIR/sql"
 cp -aR sql/* "$DEPLOY_DIR/sql"
 #
 cp install.sh "$DEPLOY_DIR"
-tar cvzf "${DEPLOY_FILE_NAME}" "${DEPLOY_DIR}"
+tar czf "${DEPLOY_FILE_NAME}" "${DEPLOY_DIR}"
 
 if [ ! -f "$DEPLOY_FILE_NAME" ]; then
     echo "Deploy build failed."
