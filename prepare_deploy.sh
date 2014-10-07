@@ -31,6 +31,10 @@ mkdir "$DEPLOY_DIR/asterisk"
 cp -aR asterisk/* "$DEPLOY_DIR/asterisk"
 mkdir "$DEPLOY_DIR/sql"
 cp -aR sql/* "$DEPLOY_DIR/sql"
+
+mkdir "$DEPLOY_DIR/mongo"
+cp -aR sql/* "$DEPLOY_DIR/mongo"
+
 #
 cp install.sh "$DEPLOY_DIR"
 tar czf "${DEPLOY_FILE_NAME}" "${DEPLOY_DIR}"
