@@ -17,6 +17,9 @@ ASTERISK_USER="asterisk";
 ASTERISK_DB_PW="asterisk";
 MYSQL_ROOT_PW=lepanos
 
+
+SCRIPTPATH=$(cd "$(dirname "$0")"; pwd)
+
 function dprint()
 {
   tput setb 1
@@ -39,18 +42,18 @@ function install_mongodb()
 	apt-get update
 	apt-get install -y mongodb-org=2.6.1 mongodb-org-server=2.6.1 mongodb-org-shell=2.6.1 mongodb-org-mongos=2.6.1 mongodb-org-tools=2.6.1
 	dprint 0 INFO "Mongodb server installed"
-	mongoimport --db revor -- collection users --file /opt/avor_install/mongo/users.json
+	mongoimport --db revor -- collection users --file ${SCRIPTPATH}/mongo/users.json
 
 }
 
 function install_sql_part()
 {
-	cd /opt/avor_install/sql
+	cd ${SCRIPTPATH}/sql
 	apt-get install libmyodbc
 	dprint 0 INFO "MySql ODBC packages installed"
 	#
-	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < /opt/avor_install/sql/create_cdr_table.sql
-	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < /opt/avor_install/sql/create_cel_table.sql
+	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < ${SCRIPTPATH}/sql/create_cdr_table.sql
+	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < ${SCRIPTPATH}/sql/create_cel_table.sql
 	echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root -p${MYSQL_ROOT_PW}
 	echo "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO ${ASTERISK_USER}@127.0.0.1 IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
 }
@@ -59,7 +62,7 @@ function install_configuration_files()
 {
 	dprint 0 INFO "Installing the configurations files for asterisk and odbc..."
 	DATE_STAMP=$(date +%Y%m%d-%H%M%S)
-	cd /opt/avor_install/asterisk
+	cd ${SCRIPTPATH}/asterisk
 	cp /etc/asterisk/cdr.conf /etc/asterisk/cdr.conf.${DATE_STAMP}.bkp
 	cp cdr.conf.sample /etc/asterisk/cdr.conf
 	#
@@ -88,6 +91,7 @@ function install_configuration_files()
 
 function main()
 {
+	echo "SCRIPTPATH ${SCRIPTPATH}"
 	dprint 0 INFO "avor installation started."
 	dprint 0 INFO "Please if the target system has an internet access ?."
 	dprint 0 INFO "Do you want to continue)? [y/N]";
