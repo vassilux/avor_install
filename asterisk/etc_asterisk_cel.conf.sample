@@ -1,7 +1,7 @@
 [general]
 enable=yes    
 apps=all
-events=ALL
+events=CHAN_START,CHAN_END, ANSWER,HANGUP
 dateformat = %d-%m-%Y %T
 
 [manager]

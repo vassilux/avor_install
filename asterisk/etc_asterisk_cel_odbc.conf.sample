@@ -1,6 +1,6 @@
 [cel]
 connection=asterisk
 table=cel
-username=asterisk
-password=asterisk
+username=root
+password=lepanos
 loguniqueid=yes

@@ -10,7 +10,7 @@ set -e
 
 VER_MAJOR="1"
 VER_MINOR="0"
-VER_PATCH="0"
+VER_PATCH="1"
 
 APP_NAME="avor_install"
 
@@ -33,7 +33,7 @@ mkdir "$DEPLOY_DIR/sql"
 cp -aR sql/* "$DEPLOY_DIR/sql"
 
 mkdir "$DEPLOY_DIR/mongo"
-cp -aR sql/* "$DEPLOY_DIR/mongo"
+cp -aR mongo/* "$DEPLOY_DIR/mongo"
 
 #
 cp install.sh "$DEPLOY_DIR"

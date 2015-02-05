@@ -52,10 +52,11 @@ function install_sql_part()
 	apt-get install libmyodbc
 	dprint 0 INFO "MySql ODBC packages installed"
 	#
-	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < ${SCRIPTPATH}/sql/create_cdr_table.sql
-	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} asteriskcdrdb < ${SCRIPTPATH}/sql/create_cel_table.sql
-	echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root -p${MYSQL_ROOT_PW}
-	echo "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO ${ASTERISK_USER}@127.0.0.1 IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW}
+	echo "CREATE DATABASE IF NOT EXISTS asteriskcdrdb;" | mysql -u root -p${MYSQL_ROOT_PW} -h127.0.0.1
+	#
+	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} -h127.0.0.1 asteriskcdrdb < ${SCRIPTPATH}/sql/create_cdr_table.sql
+	mysql -u${ASTERISK_USER} -p${ASTERISK_DB_PW} -h127.0.0.1 asteriskcdrdb < ${SCRIPTPATH}/sql/create_cel_table.sql
+	echo "GRANT ALL PRIVILEGES ON asteriskcdrdb.* TO ${ASTERISK_USER}@127.0.0.1 IDENTIFIED BY '${ASTERISK_DB_PW}';" | mysql -u root -p${MYSQL_ROOT_PW} -h127.0.0.1
 }
 
 function install_configuration_files()
@@ -64,10 +65,13 @@ function install_configuration_files()
 	DATE_STAMP=$(date +%Y%m%d-%H%M%S)
 	cd ${SCRIPTPATH}/asterisk
 	cp /etc/asterisk/cdr.conf /etc/asterisk/cdr.conf.${DATE_STAMP}.bkp
-	cp cdr.conf.sample /etc/asterisk/cdr.conf
+	cp etc_asterisk_cdr.conf.sample /etc/asterisk/cdr.conf
 	#
 	cp /etc/asterisk/cdr_mysql.conf /etc/asterisk/cdr_mysql.${DATE_STAMP}.bkp
-	cp cdr_mysql.conf.sample /etc/asterisk/cdr_mysql.conf
+	cp etc_asterisk_cdr_mysql.conf.sample /etc/asterisk/cdr_mysql.conf
+	#
+	cp /etc/asterisk/cdr_odbc.conf /etc/asterisk/cdr_odbc.${DATE_STAMP}.bkp
+	cp etc_asterisk_cdr_odbc.conf.sample /etc/asterisk/cdr_odbc.conf
 	#
 	cp /etc/asterisk/cel.conf /etc/asterisk/cel.${DATE_STAMP}.bkp
 	cp etc_asterisk_cel.conf.sample /etc/asterisk/cel.conf
@@ -85,7 +89,7 @@ function install_configuration_files()
 	cp etc_odbcinst.ini.sample /etc/odbcinst.ini
 	dprint 0 INFO "Configurations files installed."
 	dprint 0 INFO "I check mysql odbc connectivity...";
-	isql -v mysql-odbc asterisk asterisk
+	isql -v mysql-asterisk asterisk asterisk
 	dprint 0 INFO "So far so good. Please check the response of the isql executed command.";
 }
 
@@ -120,6 +124,8 @@ function main()
 	install_sql_part
 	install_configuration_files
 	dprint 0 INFO "avor installation finished."
+	dprint 0 INFO "Please restart asterisk application."
+	dprint 0 INFO "Live well."
 }
 
 main
